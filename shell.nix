@@ -1,14 +1,17 @@
 { nixpkgs ? <nixpkgs>
 , pkgs ? import nixpkgs {
     system = builtins.currentSystem;
-    config = { allowUnfree = true; };
+    config = {
+      allowUnfree = true;
+      cudaSupport = stdenv.hostPlatform.isLinux;
+    };
     overlays = [ ];
   }
 , stdenv ? pkgs.stdenv
 , libtorch ? pkgs.callPackage ./nix/libtorch.nix {
     cudaSupport =  pkgs.stdenv.hostPlatform.isLinux;
   }
-, python3 ? import ./nix/python3 { }
+, python3 ? import ./nix/python3 { inherit pkgs; }
 , lib ? pkgs.lib
 }:
 
