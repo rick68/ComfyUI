@@ -7,13 +7,18 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "comfyui_frontend_package";
-  version = "1.18.2";
+  version = "1.17.11";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-amvVlqKR4vxPAQ1FGVEeZeqfqzA7LUYf0uu5AI7Xq6g=";
+    hash = "sha256-v2Yfl730hvGEV+kFXva3lAJFDecVplvl+L5XY3PJdNU=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "0.1.0" "${version}"
+  '';
 
   pythonImportsCheck = [ pname ];
 
