@@ -9,7 +9,7 @@
   }
 , stdenv ? pkgs.stdenv
 , libtorch ? pkgs.callPackage ./nix/libtorch.nix {
-    cudaSupport =  pkgs.stdenv.hostPlatform.isLinux;
+    cudaSupport =  pkgs.config.cudaSupport;
   }
 , python3 ? import ./nix/python3 { inherit pkgs; }
 , lib ? pkgs.lib
