@@ -8,11 +8,11 @@
 python3.pkgs.buildPythonPackage rec {
   pname = "spandrel";
   version = "0.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ZG2YFqlC5Z1WqrLckENTlS5X3uSyyz9Z9+pNwPsRofI=";
+    hash = "sha256-ZG2YFqlC5Z1WqrLckENTlS5X3uSyyz9Z9+pNwPsRofI=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

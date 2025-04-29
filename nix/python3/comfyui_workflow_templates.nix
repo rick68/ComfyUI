@@ -8,11 +8,11 @@
 python3.pkgs.buildPythonPackage rec {
   pname = "comfyui_workflow_templates";
   version = "0.1.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zeHWNE2eWrGt6+egDZBjDwLuzkm+QJFFVvmzP2zKe7Q=";
+    hash = "sha256-zeHWNE2eWrGt6+egDZBjDwLuzkm+QJFFVvmzP2zKe7Q=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
