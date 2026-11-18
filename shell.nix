@@ -37,7 +37,7 @@ pkgs.mkShell {
     # Launcher: `comfyui [extra args]`, works from any directory.
     COMFYUI_ROOT="$PWD"
     comfyui() {
-      (cd "$COMFYUI_ROOT" && python main.py --listen 127.0.0.1 --port 8188 --enable-manager "$@")
+      (cd "$COMFYUI_ROOT" && python main.py --listen 127.0.0.1 --port 8188 --enable-manager --preview-method auto "$@")
     }
   '';
 }
