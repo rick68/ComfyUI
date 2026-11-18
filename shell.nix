@@ -16,12 +16,15 @@ pkgs.mkShell {
       uv venv --python 3.13 .venv || return 1
     fi
 
-    req_hash=$(cat requirements.txt manager_requirements.txt 2>/dev/null | shasum -a 256 | cut -d' ' -f1)
+    # torchaudio: not in core requirements, but ComfyUI-Manager only guards
+    # torch/torchvision/torchaudio against downgrades when all three exist.
+    extra_pkgs="torchaudio"
+    req_hash=$( (cat requirements.txt manager_requirements.txt 2>/dev/null; echo "$extra_pkgs") | shasum -a 256 | cut -d' ' -f1)
     stamp=.venv/.requirements.sha256
     if [ "$(cat "$stamp" 2>/dev/null)" != "$req_hash" ]; then
       echo "[shell.nix] requirements changed; syncing packages into .venv"
       if uv pip install --python .venv/bin/python \
-           -r requirements.txt -r manager_requirements.txt; then
+           -r requirements.txt -r manager_requirements.txt $extra_pkgs; then
         echo "$req_hash" > "$stamp"
       else
         echo "[shell.nix] uv pip install failed; .venv left as-is" >&2
@@ -31,6 +34,10 @@ pkgs.mkShell {
     export VIRTUAL_ENV="$PWD/.venv"
     export PATH="$VIRTUAL_ENV/bin:$PATH"
 
-    alias comfyui='python main.py --listen 127.0.0.1 --port 8188'
+    # Launcher: `comfyui [extra args]`, works from any directory.
+    COMFYUI_ROOT="$PWD"
+    comfyui() {
+      (cd "$COMFYUI_ROOT" && python main.py --listen 127.0.0.1 --port 8188 --enable-manager "$@")
+    }
   '';
 }
